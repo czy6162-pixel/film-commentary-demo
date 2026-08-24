@@ -1,7 +1,3 @@
-Exit code: 0
-Wall time: 0.5 seconds
-Total output lines: 913
-Output:
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -494,7 +490,99 @@ But that is no reason to get a divorce!`;
     }
     function titleCase(text) { return text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase()); }
     function styleText(style) { return [style.style_name, style.rendering, style.color_palette, style.period, style.lighting].filter(Boolean).join(", "); }
-    function makeId(prefix, index) { return `${prefix}_${String(index).…1007 tokens truncated…urrent.lines.push(raw.replace(/\s+$/, ""));
+    function makeId(prefix, index) { return `${prefix}_${String(index).padStart(3, "0")}`; }
+
+    function isCharacterCue(line) {
+      const value = line.trim().replace(/:$/, "");
+      return Boolean(value && value.length <= 40 && value === value.toUpperCase() && !NON_CHARACTER_CUES.has(value) && !SCENE_PATTERN.test(value) && /^[A-Z][A-Z0-9 .'-]*$/.test(value));
+    }
+
+    function splitHeading(heading) {
+      const normalized = heading.trim().replace(/\s*--\s*/g, " - ");
+      const cut = normalized.lastIndexOf(" - ");
+      if (cut >= 0) {
+        const location = normalized.slice(0, cut).trim();
+        const time = normalized.slice(cut + 3).trim();
+        if (TIME_WORDS.has(time.toUpperCase())) return [location, titleCase(time)];
+      }
+      return [normalized, ""];
+    }
+
+    function collectScenes(lines) {
+      const scenes = [];
+      let current = null;
+      lines.forEach(raw => {
+        const line = raw.trim();
+        const match = line.match(SCENE_PATTERN);
+        if (match) {
+          if (current) scenes.push(current);
+          const [location, time] = splitHeading(match[2]);
+          current = { heading: line, location, time, lines: [] };
+        } else if (current) current.lines.push(raw.replace(/\s+$/, ""));
+      });
+      if (current) scenes.push(current);
+      return scenes;
+    }
+
+    function parseSceneContent(lines) {
+      const blocks = [];
+      let paragraph = [];
+      let index = 0;
+      const flush = () => { if (paragraph.length) { blocks.push({ type: "action", text: paragraph.join(" ") }); paragraph = []; } };
+      while (index < lines.length) {
+        const line = lines[index].trim();
+        if (!line) { flush(); index += 1; continue; }
+        if (isCharacterCue(line)) {
+          let next = index + 1;
+          while (next < lines.length && !lines[next].trim()) next += 1;
+          if (next < lines.length && !isCharacterCue(lines[next].trim()) && !SCENE_PATTERN.test(lines[next].trim())) {
+            flush();
+            const speaker = line.replace(/:$/, "").trim();
+            let delivery = "";
+            let nextLine = lines[next].trim();
+            if (nextLine.startsWith("(") && nextLine.endsWith(")")) { delivery = nextLine.slice(1, -1).trim(); next += 1; }
+            const dialogueLines = [];
+            while (next < lines.length) {
+              const dialogueLine = lines[next].trim();
+              if (!dialogueLine || isCharacterCue(dialogueLine) || SCENE_PATTERN.test(dialogueLine)) break;
+              dialogueLines.push(dialogueLine); next += 1;
+            }
+            if (dialogueLines.length) { blocks.push({ type: "dialogue", speaker, delivery, text: dialogueLines.join(" ") }); index = next; continue; }
+          }
+        }
+        paragraph.push(line); index += 1;
+      }
+      flush();
+      return blocks;
+    }
+
+    function actionItems(text, cueOrder, characterIds) {
+      const items = [];
+      const sentences = text.trim().split(/(?<=[.!?])\s+/).map(item => item.trim()).filter(Boolean);
+      sentences.forEach(sentence => {
+        sentence.split(/\s+while\s+/i).map(item => item.trim()).filter(Boolean).forEach(clause => {
+          const mentioned = cueOrder.filter(cue => containsWord(clause, cue));
+          if (!mentioned.length) items.push({ character_id: null, description: clause });
+          else mentioned.forEach(cue => items.push({ character_id: characterIds[cue], description: clause }));
+        });
+      });
+      return items;
+    }
+
+    function collectChineseScenes(lines) {
+      const scenes = [];
+      let current = null;
+      lines.forEach(raw => {
+        const line = raw.trim();
+        if (!line || /^(剧名|标题)\s*[：:]/.test(line)) return;
+        const match = line.match(CHINESE_SCENE_PATTERN);
+        if (match) {
+          if (current) scenes.push(current);
+          const location = (match[2] || match[1]).trim();
+          current = { heading: line, location, time: "", lines: [] };
+        } else {
+          if (!current) current = { heading: "场景一", location: "未指定场景", time: "", lines: [] };
+          current.lines.push(raw.replace(/\s+$/, ""));
         }
       });
       if (current) scenes.push(current);
@@ -822,4 +910,3 @@ But that is no reason to get a divorce!`;
   </script>
 </body>
 </html>
-
