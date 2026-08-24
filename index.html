@@ -1,0 +1,825 @@
+Exit code: 0
+Wall time: 0.5 seconds
+Total output lines: 913
+Output:
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>影视解说自动化演示台</title>
+  <meta name="description" content="从短剧本生成剧本解析、资产四视图、分镜和视频提示词的本地演示界面。">
+  <style>
+    :root {
+      --ink: #17231f;
+      --muted: #64716c;
+      --paper: #f5f1e8;
+      --surface: rgba(255, 255, 255, 0.82);
+      --line: rgba(23, 35, 31, 0.13);
+      --green: #1f6952;
+      --green-dark: #124536;
+      --amber: #dc7b31;
+      --amber-soft: #fff0de;
+      --shadow: 0 24px 70px rgba(36, 52, 46, 0.12);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 5%, rgba(220, 123, 49, 0.15), transparent 27rem),
+        radial-gradient(circle at 92% 15%, rgba(31, 105, 82, 0.13), transparent 30rem),
+        var(--paper);
+      font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .shell { width: min(1440px, calc(100% - 40px)); margin: 0 auto; }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 0 18px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      color: white;
+      background: var(--green-dark);
+      box-shadow: 0 8px 22px rgba(18, 69, 54, 0.22);
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    .brand strong { display: block; font-size: 15px; }
+    .brand span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .local-badge {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--green-dark);
+      background: rgba(255, 255, 255, 0.58);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 24px;
+      align-items: end;
+      padding: 36px 0 30px;
+    }
+
+    .eyebrow {
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 12px 0 14px;
+      font-family: Georgia, "Songti SC", serif;
+      font-size: clamp(36px, 5vw, 66px);
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+    }
+
+    .lead {
+      max-width: 720px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .flow {
+      display: grid;
+      gap: 8px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.54);
+    }
+
+    .flow-step { display: flex; align-items: center; gap: 11px; font-size: 13px; font-weight: 700; }
+    .flow-step b {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      color: var(--green-dark);
+      background: #dcebe4;
+      font-size: 11px;
+    }
+    .flow-line { width: 1px; height: 10px; margin-left: 13px; background: var(--line); }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(360px, 0.88fr) minmax(480px, 1.12fr);
+      gap: 22px;
+      align-items: start;
+      padding-bottom: 50px;
+    }
+
+    .panel {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-head h2 { margin: 0; font-size: 17px; }
+    .panel-head small { color: var(--muted); }
+    .panel-body { padding: 22px; }
+
+    .field { margin-bottom: 16px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    label { display: block; margin-bottom: 7px; font-size: 12px; font-weight: 800; }
+    input, textarea {
+      width: 100%;
+      border: 1px solid rgba(23, 35, 31, 0.17);
+      border-radius: 12px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.74);
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+    input { height: 43px; padding: 0 12px; }
+    textarea {
+      min-height: 330px;
+      padding: 14px;
+      resize: vertical;
+      font-family: Consolas, "Microsoft YaHei", monospace;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(31, 105, 82, 0.11);
+    }
+
+    .script-tools { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+    .script-tools label { margin: 0; }
+    .text-button, .download-button {
+      border: 0;
+      color: var(--green);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .quick-run-button {
+      margin-left: 6px;
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 10px;
+      color: white;
+      background: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .parser-note {
+      margin: 0 0 9px;
+      color: var(--green-dark);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .file-input { display: none; }
+
+    details {
+      margin: 18px 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(245, 241, 232, 0.58);
+    }
+    summary { padding: 13px 14px; cursor: pointer; font-size: 13px; font-weight: 800; }
+    .details-body { padding: 0 14px 14px; }
+    .hint { margin: -5px 0 12px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+
+    .run-button {
+      width: 100%;
+      height: 52px;
+      border: 0;
+      border-radius: 14px;
+      color: white;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      box-shadow: 0 14px 30px rgba(18, 69, 54, 0.22);
+      font-weight: 800;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .run-button:hover { transform: translateY(-1px); box-shadow: 0 17px 34px rgba(18, 69, 54, 0.27); }
+    .run-button:active { transform: translateY(0); }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 22px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #aab4b0; }
+    .status.ready .status-dot { background: #40a476; box-shadow: 0 0 0 4px rgba(64, 164, 118, 0.12); }
+    .status.error { color: #a73c2c; }
+    .status.error .status-dot { background: #d75945; }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .metric { padding: 13px; border-radius: 14px; background: #f7f4ed; }
+    .metric strong { display: block; font-family: Georgia, serif; font-size: 26px; line-height: 1; }
+    .metric span { display: block; margin-top: 6px; color: var(--muted); font-size: 11px; }
+
+    .tabs { display: flex; gap: 6px; overflow-x: auto; padding: 14px 18px 10px; }
+    .tab {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .tab.active { border-color: var(--line); color: var(--green-dark); background: #e8f0eb; }
+
+    .output-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 20px 12px;
+    }
+    .output-name { color: var(--muted); font-family: Consolas, monospace; font-size: 12px; }
+    .download-group { display: flex; gap: 10px; }
+
+    pre {
+      overflow: auto;
+      min-height: 600px;
+      max-height: 780px;
+      margin: 0;
+      padding: 22px;
+      color: #dceae4;
+      background: #17231f;
+      font-family: Consolas, "Microsoft YaHei", monospace;
+      font-size: 12px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    footer { padding: 0 0 32px; color: var(--muted); text-align: center; font-size: 11px; }
+
+    @media (max-width: 980px) {
+      .hero, .workspace { grid-template-columns: 1fr; }
+      .hero { padding-top: 20px; }
+      .flow { grid-template-columns: repeat(4, 1fr); }
+      .flow-line { display: none; }
+      .flow-step { display: grid; justify-items: center; text-align: center; }
+    }
+
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 22px, 1440px); }
+      header { padding-top: 18px; }
+      .local-badge { display: none; }
+      .hero { padding-bottom: 20px; }
+      .flow { grid-template-columns: 1fr 1fr; }
+      .workspace { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+      .panel-body { padding: 17px; }
+      .field-row { grid-template-columns: 1fr; gap: 0; }
+      .metrics { grid-template-columns: 1fr 1fr; }
+      pre { min-height: 460px; padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <div class="brand-mark">影</div>
+        <div><strong>影视解说自动化</strong><span>FILM FLOW · 影视流演示台</span></div>
+      </div>
+      <div class="local-badge">本地运行 · 数据不上传</div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">MVP · 最小可行产品</div>
+        <h1>一份剧本，生成整套前期制作数据</h1>
+        <p class="lead">粘贴中文或标准格式英文短剧本，配置统一视觉风格，即可生成剧本解析、资产四视图、分镜和绘画及视频提示词。</p>
+      </div>
+      <div class="flow" aria-label="处理流程">
+        <div class="flow-step"><b>01</b><span>剧本解析</span></div><div class="flow-line"></div>
+        <div class="flow-step"><b>02</b><span>资产四视图</span></div><div class="flow-line"></div>
+        <div class="flow-step"><b>03</b><span>分镜生成</span></div><div class="flow-line"></div>
+        <div class="flow-step"><b>04</b><span>提示词输出</span></div>
+      </div>
+    </section>
+
+    <main class="workspace">
+      <section class="panel">
+        <div class="panel-head"><h2>输入与配置</h2><small>所有字段均可修改</small></div>
+        <div class="panel-body">
+          <div class="script-tools">
+            <label for="screenplay">短剧本（支持中文与英文）</label>
+            <div>
+              <button class="text-button" id="sampleButton" type="button">恢复示例</button>
+              <button class="text-button" id="uploadButton" type="button">读取文本文件</button>
+              <button class="quick-run-button" id="quickRunButton" type="button">解析并生成</button>
+              <input class="file-input" id="fileInput" type="file" accept=".txt,text/plain">
+            </div>
+          </div>
+          <p class="parser-note">中文剧本直接使用“角色：对白”格式；无需配置 API（应用程序接口）。</p>
+          <textarea id="screenplay" spellcheck="false" aria-label="中文或英文短剧本"></textarea>
+
+          <div class="field-row">
+            <div class="field"><label for="projectId">项目编号</label><input id="projectId" value="charade_web_demo"></div>
+            <div class="field"><label for="styleName">风格名称</label><input id="styleName" value="Classic 1960s mystery thriller"></div>
+          </div>
+          <div class="field"><label for="rendering">渲染方式</label><input id="rendering" value="Realistic cinematic photography with subtle film grain"></div>
+          <div class="field"><label for="palette">色彩方案</label><input id="palette" value="Muted cool colors with restrained warm highlights"></div>
+          <div class="field-row">
+            <div class="field"><label for="period">时代背景</label><input id="period" value="1960s French Alps resort"></div>
+            <div class="field"><label for="lighting">灯光风格</label><input id="lighting" value="Natural winter daylight with soft contrast"></div>
+          </div>
+
+          <details>
+            <summary>可选 API（应用程序接口）配置</summary>
+            <div class="details-body">
+              <p class="hint">当前演示只生成提示词，不发送网络请求。这里用于展示后续生成服务的用户配置入口。</p>
+              <div class="field"><label for="apiUrl">服务地址</label><input id="apiUrl" placeholder="https://example.com/v1"></div>
+              <div class="field-row">
+                <div class="field"><label for="apiModel">模型名称</label><input id="apiModel" placeholder="由用户填写"></div>
+                <div class="field"><label for="apiKey">访问密钥</label><input id="apiKey" type="password" autocomplete="off" placeholder="仅保留在当前页面"></div>
+              </div>
+            </div>
+          </details>
+
+          <button class="run-button" id="runButton" type="button">运行完整流水线</button>
+          <div class="status" id="status"><span class="status-dot"></span><span id="statusText">等待运行</span></div>
+        </div>
+      </section>
+
+      <section class="panel" aria-live="polite">
+        <div class="panel-head"><h2>结构化结果</h2><small>JSON · 结构化数据格式</small></div>
+        <div class="metrics">
+          <div class="metric"><strong id="characterCount">—</strong><span>角色</span></div>
+          <div class="metric"><strong id="assetCount">—</strong><span>资产</span></div>
+          <div class="metric"><strong id="shotCount">—</strong><span>分镜</span></div>
+          <div class="metric"><strong id="promptCount">—</strong><span>提示词</span></div>
+        </div>
+        <div class="tabs" role="tablist" aria-label="结果文件">
+          <button class="tab active" type="button" data-key="analysis">剧本解析</button>
+          <button class="tab" type="button" data-key="assets">资产四视图</button>
+          <button class="tab" type="button" data-key="storyboard">分镜</button>
+          <button class="tab" type="button" data-key="prompts">提示词</button>
+        </div>
+        <div class="output-toolbar">
+          <span class="output-name" id="outputName">script_analysis.json</span>
+          <div class="download-group">
+            <button class="download-button" id="downloadCurrent" type="button">下载当前文件</button>
+            <button class="download-button" id="downloadAll" type="button">下载全部四份</button>
+          </div>
+        </div>
+        <pre id="output">点击“运行完整流水线”生成结果。</pre>
+      </section>
+    </main>
+
+    <footer>本演示在浏览器本地完成数据处理，不生成实际图片或视频。</footer>
+  </div>
+
+  <script>
+    const SAMPLE_SCRIPT = `TITLE: Charade - Opening Sample
+SOURCE: https://imsdb.com/scripts/Charade.html
+NOTE: Shortened and lightly adapted from the opening for parser testing.
+
+EXT. MEGEVE HOTEL SUN DECK - DAY
+
+The elegant hotel sun deck has white tables, bright parasols and a view of snow-covered mountains. REGGIE, a stylish American woman in her late twenties with short dark hair and a pale blue ski outfit, sits beneath a parasol and eats lunch.
+
+JEAN-LOUIS, a six-year-old French boy in a red wool coat and navy trousers, aims a small black toy water pistol with a silver nozzle and squeezes the trigger. A stream of water hits REGGIE in the face.
+
+JEAN-LOUIS
+(nervously)
+Oh, la.
+
+REGGIE
+(sternly)
+Don't tell me you didn't know it was loaded.
+
+SYLVIE, a blonde French woman in her early thirties wearing a cream winter suit, approaches from the railing. JEAN-LOUIS runs away. SYLVIE picks up a glossy travel magazine with a blue cover while REGGIE continues eating.
+
+SYLVIE
+(concerned)
+When you start to eat like this, something is the matter.
+
+REGGIE
+(quietly)
+Sylvie, I'm getting a divorce.
+
+INT. HOTEL SWIMMING POOL - DAY
+
+REGGIE and SYLVIE walk beside a rectangular glass-enclosed pool with pale stone tiles and chrome handrails. Snow-covered mountains fill the ceiling-high windows behind them.
+
+SYLVIE
+(surprised)
+But why do you want a divorce?
+
+REGGIE
+(matter-of-factly)
+Because I don't love him.
+
+SYLVIE
+(in disbelief)
+But that is no reason to get a divorce!`;
+
+    const SCENE_PATTERN = /^(INT\.|EXT\.|INT\/EXT\.|EXT\/INT\.|I\/E\.)\s*(.+)$/i;
+    const CHINESE_SCENE_PATTERN = /^(第[一二三四五六七八九十百\d]+[场幕]|场景\s*[一二三四五六七八九十百\d]*|内景|外景)[：:\s、.．-]*(.*)$/;
+    const CHINESE_DIALOGUE_PATTERN = /^([\u4e00-\u9fffA-Za-z0-9·]{1,12})\s*[：:]\s*(.*)$/;
+    const TIME_WORDS = new Set(["DAY", "NIGHT", "DAWN", "DUSK", "MORNING", "AFTERNOON", "EVENING", "CONTINUOUS", "LATER"]);
+    const NON_CHARACTER_CUES = new Set(["FADE IN", "FADE OUT", "CUT TO", "DISSOLVE TO", "ANOTHER ANGLE", "WIDER ANGLE", "CLOSE SHOT", "MEDIUM SHOT", "REVERSE SHOT"]);
+    const PROP_TERMS = {
+      "water pistol": "A small toy water pistol.", "magazine": "A printed magazine.", "key": "A key mentioned in the script.",
+      "letter": "A paper letter mentioned in the script.", "photograph": "A photograph mentioned in the script.", "photo": "A photograph mentioned in the script.",
+      "gun": "A gun mentioned in the script.", "knife": "A knife mentioned in the script.", "phone": "A phone mentioned in the script.", "suitcase": "A suitcase mentioned in the script.",
+      "水枪": "剧本中出现的水枪。", "手枪": "剧本中出现的手枪。", "手机": "剧本中出现的手机。", "钥匙": "剧本中出现的钥匙。",
+      "信件": "剧本中出现的信件。", "照片": "剧本中出现的照片。", "行李箱": "剧本中出现的行李箱。", "杂志": "剧本中出现的杂志。",
+      "咖啡": "剧本中出现的咖啡。", "杯子": "剧本中出现的杯子。"
+    };
+    const VIEW_DEFINITIONS = {
+      character: [["front", "Front view", "front full-body view"], ["three_quarter", "Three-quarter view", "three-quarter full-body view"], ["side", "Side view", "left side full-body view"], ["back", "Back view", "back full-body view"]],
+      scene: [["main", "Main view", "main establishing view from the entrance"], ["reverse", "Reverse view", "reverse view facing the entrance"], ["side", "Side view", "side view showing spatial depth"], ["top", "Top layout", "top-down layout view"]],
+      prop: [["front", "Front view", "front product view"], ["three_quarter", "Three-quarter view", "three-quarter product view"], ["side", "Side view", "left side product view"], ["back", "Back view", "back product view"]]
+    };
+    const FILE_NAMES = { analysis: "script_analysis.json", assets: "assets.json", storyboard: "storyboard.json", prompts: "prompts.json" };
+    let results = null;
+    let activeKey = "analysis";
+
+    const $ = id => document.getElementById(id);
+    $("screenplay").value = SAMPLE_SCRIPT;
+
+    function escapeRegExp(text) { return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+    function containsWord(text, term) {
+      if (/[\u3400-\u9fff]/.test(term)) return text.toLowerCase().includes(term.toLowerCase());
+      return new RegExp(`\\b${escapeRegExp(term)}s?\\b`, "i").test(text);
+    }
+    function titleCase(text) { return text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase()); }
+    function styleText(style) { return [style.style_name, style.rendering, style.color_palette, style.period, style.lighting].filter(Boolean).join(", "); }
+    function makeId(prefix, index) { return `${prefix}_${String(index).…1007 tokens truncated…urrent.lines.push(raw.replace(/\s+$/, ""));
+        }
+      });
+      if (current) scenes.push(current);
+      return scenes;
+    }
+
+    function parseChineseLine(line) {
+      const match = line.match(CHINESE_DIALOGUE_PATTERN);
+      if (!match || /^(场景|时间|地点|标题|剧名)$/.test(match[1])) return null;
+      let text = match[2].trim();
+      let delivery = "";
+      const deliveryMatch = text.match(/^[（(]([^）)]+)[）)]\s*/);
+      if (deliveryMatch) {
+        delivery = deliveryMatch[1].trim();
+        text = text.slice(deliveryMatch[0].length).trim();
+      }
+      return { speaker: match[1].trim(), delivery, text };
+    }
+
+    function parseChineseScript(text, projectId, visualStyle) {
+      const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/);
+      const rawScenes = collectChineseScenes(lines);
+      if (!rawScenes.length) throw new Error("没有识别到中文剧本内容。");
+      const cueOrder = [];
+      rawScenes.forEach(scene => scene.lines.forEach(raw => {
+        const dialogue = parseChineseLine(raw.trim());
+        if (dialogue && dialogue.text && !cueOrder.includes(dialogue.speaker)) cueOrder.push(dialogue.speaker);
+      }));
+      if (!cueOrder.length) throw new Error("没有识别到中文对白，请使用“角色：对白”格式。");
+
+      const characterIds = Object.fromEntries(cueOrder.map((cue, index) => [cue, makeId("char", index + 1)]));
+      const sceneIds = rawScenes.map((_, index) => makeId("scene", index + 1));
+      const combinedText = rawScenes.map(scene => scene.lines.join("\n")).join("\n");
+      const propCandidates = [];
+      Object.entries(PROP_TERMS).forEach(([term, description]) => {
+        if (containsWord(combinedText, term)) {
+          const canonical = term === "photo" ? "photograph" : term;
+          if (!propCandidates.some(item => item[0] === canonical)) propCandidates.push([canonical, description]);
+        }
+      });
+      const propIds = Object.fromEntries(propCandidates.map(([term], index) => [term, makeId("prop", index + 1)]));
+      const descriptions = Object.fromEntries(cueOrder.map(cue => [cue, ""]));
+      rawScenes.forEach(scene => scene.lines.forEach(raw => {
+        const line = raw.trim();
+        if (!parseChineseLine(line)) cueOrder.forEach(cue => { if (!descriptions[cue] && line.includes(cue)) descriptions[cue] = line; });
+      }));
+      const characters = cueOrder.map(cue => ({ character_id: characterIds[cue], name: cue, aliases: [], description: descriptions[cue] }));
+      const props = propCandidates.map(([term, fallback]) => {
+        const scene_ids = [];
+        let description = fallback;
+        rawScenes.forEach((scene, index) => {
+          const sceneText = scene.lines.join(" ");
+          if (containsWord(sceneText, term)) {
+            scene_ids.push(sceneIds[index]);
+            const detail = scene.lines.find(line => containsWord(line, term));
+            if (detail) description = detail.trim();
+          }
+        });
+        return { prop_id: propIds[term], name: term, description, scene_ids };
+      });
+
+      let dialogueNumber = 1;
+      const scenes = rawScenes.map((scene, index) => {
+        const presentCues = [];
+        const actions = [];
+        const dialogues = [];
+        const actionTexts = [];
+        scene.lines.forEach(raw => {
+          const line = raw.trim();
+          if (!line) return;
+          const dialogue = parseChineseLine(line);
+          if (dialogue && dialogue.text) {
+            if (!presentCues.includes(dialogue.speaker)) presentCues.push(dialogue.speaker);
+            dialogues.push({ dialogue_id: makeId("dialogue", dialogueNumber++), speaker_id: characterIds[dialogue.speaker], text: dialogue.text, delivery: dialogue.delivery });
+          } else {
+            actionTexts.push(line);
+            const mentioned = cueOrder.filter(cue => line.includes(cue));
+            if (!mentioned.length) actions.push({ character_id: null, description: line });
+            else mentioned.forEach(cue => {
+              if (!presentCues.includes(cue)) presentCues.push(cue);
+              actions.push({ character_id: characterIds[cue], description: line });
+            });
+          }
+        });
+        const fallbackSummary = dialogues.length ? `${cueOrder.find(cue => characterIds[cue] === dialogues[0].speaker_id)}在${scene.location}中说话。` : `${scene.location}中的剧情。`;
+        const summary = actionTexts[0] || fallbackSummary;
+        if (!actions.length) actions.push({ character_id: dialogues[0]?.speaker_id || null, description: summary });
+        const sceneText = scene.lines.join(" ");
+        return {
+          scene_id: sceneIds[index], sequence: index + 1, heading: scene.heading, location: scene.location, time: scene.time,
+          summary, character_ids: presentCues.map(cue => characterIds[cue]),
+          prop_ids: propCandidates.filter(([term]) => containsWord(sceneText, term)).map(([term]) => propIds[term]), actions, dialogues
+        };
+      });
+      const titleLine = lines.find(line => /^(剧名|标题)\s*[：:]/.test(line.trim()));
+      const title = titleLine ? titleLine.split(/[：:]/).slice(1).join(":").trim() : "中文短剧本";
+      return { format_version: "1.0", project_id: projectId, title, visual_style: visualStyle, characters, props, scenes };
+    }
+
+    function parseScript(text, projectId, visualStyle) {
+      const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/);
+      const rawScenes = collectScenes(lines);
+      if (!rawScenes.length && /[\u3400-\u9fff]/.test(text)) return parseChineseScript(text, projectId, visualStyle);
+      if (!rawScenes.length) throw new Error("没有识别到剧本内容。英文剧本请使用 INT. 或 EXT. 等场景标题，中文剧本请使用“角色：对白”格式。");
+      rawScenes.forEach(scene => { scene.blocks = parseSceneContent(scene.lines); });
+      const cueOrder = [];
+      rawScenes.forEach(scene => scene.blocks.forEach(block => { if (block.type === "dialogue" && !cueOrder.includes(block.speaker)) cueOrder.push(block.speaker); }));
+      const characterIds = Object.fromEntries(cueOrder.map((cue, index) => [cue, makeId("char", index + 1)]));
+      const sceneIds = rawScenes.map((_, index) => makeId("scene", index + 1));
+      const combinedText = rawScenes.map(scene => scene.lines.join("\n")).join("\n").toLowerCase();
+      const propCandidates = [];
+      Object.entries(PROP_TERMS).forEach(([term, description]) => {
+        if (containsWord(combinedText, term)) {
+          const canonical = term === "photo" ? "photograph" : term;
+          if (!propCandidates.some(item => item[0] === canonical)) propCandidates.push([canonical, description]);
+        }
+      });
+      const propIds = Object.fromEntries(propCandidates.map(([term], index) => [term, makeId("prop", index + 1)]));
+
+      const characters = cueOrder.map(cue => {
+        let description = "";
+        rawScenes.some(scene => scene.blocks.some(block => {
+          if (block.type === "action" && containsWord(block.text, cue)) { description = block.text; return true; }
+          return false;
+        }));
+        return { character_id: characterIds[cue], name: titleCase(cue.replace(/\s*\([^)]*\)\s*$/, "")), aliases: [], description };
+      });
+
+      const props = propCandidates.map(([term, fallback]) => {
+        const scene_ids = [];
+        let description = fallback;
+        rawScenes.forEach((scene, index) => {
+          const sceneText = scene.lines.join(" ");
+          if (containsWord(sceneText, term)) {
+            scene_ids.push(sceneIds[index]);
+            const action = scene.blocks.find(block => block.type === "action" && containsWord(block.text, term));
+            if (action) description = action.text;
+          }
+        });
+        return { prop_id: propIds[term], name: titleCase(term), description, scene_ids };
+      });
+
+      let dialogueNumber = 1;
+      const scenes = rawScenes.map((scene, index) => {
+        const presentCues = [];
+        const actions = [];
+        const dialogues = [];
+        const actionTexts = [];
+        scene.blocks.forEach(block => {
+          if (block.type === "dialogue") {
+            if (!presentCues.includes(block.speaker)) presentCues.push(block.speaker);
+            dialogues.push({ dialogue_id: makeId("dialogue", dialogueNumber++), speaker_id: characterIds[block.speaker], text: block.text, delivery: block.delivery });
+          } else {
+            actionTexts.push(block.text);
+            cueOrder.filter(cue => containsWord(block.text, cue)).forEach(cue => { if (!presentCues.includes(cue)) presentCues.push(cue); });
+            actions.push(...actionItems(block.text, cueOrder, characterIds));
+          }
+        });
+        const sceneText = scene.lines.join(" ");
+        return {
+          scene_id: sceneIds[index], sequence: index + 1, heading: scene.heading, location: titleCase(scene.location), time: scene.time,
+          summary: actionTexts[0] || "", character_ids: presentCues.map(cue => characterIds[cue]),
+          prop_ids: propCandidates.filter(([term]) => containsWord(sceneText, term)).map(([term]) => propIds[term]), actions, dialogues
+        };
+      });
+
+      const titleLine = lines.find(line => line.toUpperCase().startsWith("TITLE:"));
+      return { format_version: "1.0", project_id: projectId, title: titleLine ? titleLine.split(":").slice(1).join(":").trim() : "Untitled Screenplay", visual_style: visualStyle, characters, props, scenes };
+    }
+
+    function buildViews(assetType, name, description, visualStyle) {
+      const globalStyle = styleText(visualStyle);
+      return VIEW_DEFINITIONS[assetType].map(([view_id, view_name, instruction]) => {
+        const framing = assetType === "character" ? "neutral pose, consistent face, body shape, hair and clothing, plain background" :
+          assetType === "scene" ? "no characters, consistent architecture, furniture, entrances and lighting" :
+          "centered object, consistent shape, material, color and wear, plain background";
+        return { view_id, view_name, prompt: `${globalStyle}. ${name}: ${description}. ${instruction}, ${framing}.` };
+      });
+    }
+
+    function generateAssets(analysis) {
+      const assets = [];
+      analysis.characters.forEach(character => {
+        const description = character.description.trim() || character.name;
+        assets.push({ asset_id: character.character_id, asset_type: "character", name: character.name, source_scene_ids: analysis.scenes.filter(scene => scene.character_ids.includes(character.character_id)).map(scene => scene.scene_id), consistency_description: description, views: buildViews("character", character.name, description, analysis.visual_style) });
+      });
+      analysis.scenes.forEach(scene => {
+        const description = [scene.location, scene.summary].filter(Boolean).map(item => item.trim().replace(/\.$/, "")).join(". ");
+        assets.push({ asset_id: scene.scene_id, asset_type: "scene", name: scene.location || scene.heading, source_scene_ids: [scene.scene_id], consistency_description: description, views: buildViews("scene", scene.location || scene.heading, description, analysis.visual_style) });
+      });
+      analysis.props.forEach(prop => {
+        const description = prop.description.trim() || prop.name;
+        assets.push({ asset_id: prop.prop_id, asset_type: "prop", name: prop.name, source_scene_ids: prop.scene_ids, consistency_description: description, views: buildViews("prop", prop.name, description, analysis.visual_style) });
+      });
+      return { format_version: analysis.format_version, project_id: analysis.project_id, visual_style: analysis.visual_style, assets };
+    }
+
+    function selectAction(scene, characterId = null) {
+      if (characterId) {
+        const matching = scene.actions.filter(action => action.character_id === characterId).sort((a, b) => b.description.length - a.description.length);
+        if (matching.length) return matching[0];
+      }
+      return scene.actions[0] || { character_id: characterId, description: scene.summary };
+    }
+
+    function generateStoryboard(analysis) {
+      const names = Object.fromEntries(analysis.characters.map(character => [character.character_id, character.name]));
+      const props = Object.fromEntries(analysis.props.map(prop => [prop.prop_id, prop]));
+      const shots = [];
+      let shotNumber = 1;
+      analysis.scenes.forEach(scene => {
+        const action = selectAction(scene);
+        const visual = scene.summary;
+        const character_ids = scene.character_ids.filter(id => containsWord(visual, names[id]));
+        shots.push({ shot_id: makeId("shot", shotNumber), sequence: shotNumber, scene_id: scene.scene_id, duration_seconds: 4, shot_size: "Wide shot", camera_angle: "Eye level", camera_movement: "Slow push in", character_ids, prop_ids: [], visual, actions: [action], dialogue_id: null, narration: "", transition: "Cut" });
+        shotNumber += 1;
+        scene.dialogues.forEach(dialogue => {
+          const characterId = dialogue.speaker_id;
+          const actionItem = selectAction(scene, characterId);
+          const closeUp = shotNumber % 2 === 0;
+          const visualText = `${names[characterId]} speaks in ${scene.location}. ${actionItem.description}`;
+          const characters = scene.character_ids.filter(id => containsWord(visualText, names[id]));
+          if (!characters.includes(characterId)) characters.unshift(characterId);
+          const prop_ids = scene.prop_ids.filter(id => props[id] && containsWord(visualText, props[id].name));
+          shots.push({
+            shot_id: makeId("shot", shotNumber), sequence: shotNumber, scene_id: scene.scene_id,
+            duration_seconds: Math.max(3, Math.min(7, Math.round(dialogue.text.split(/\s+/).length / 2.5))),
+            shot_size: closeUp ? "Close-up" : "Medium close-up", camera_angle: closeUp ? "Front view" : "Three-quarter view",
+            camera_movement: closeUp ? "Static" : "Subtle push in", character_ids: characters, prop_ids, visual: visualText,
+            actions: [actionItem], dialogue_id: dialogue.dialogue_id, narration: "", transition: "Cut"
+          });
+          shotNumber += 1;
+        });
+      });
+      if (shots.length) shots[shots.length - 1].transition = "Fade out";
+      return { format_version: analysis.format_version, project_id: analysis.project_id, visual_style: analysis.visual_style, shots };
+    }
+
+    function generatePrompts(storyboard, analysis, assetData) {
+      const globalStyle = styleText(storyboard.visual_style);
+      const dialogues = Object.fromEntries(analysis.scenes.flatMap(scene => scene.dialogues).map(dialogue => [dialogue.dialogue_id, dialogue]));
+      const assets = Object.fromEntries(assetData.assets.map(asset => [asset.asset_id, asset]));
+      const pickView = (asset, desired) => asset.views.some(view => view.view_id === desired) ? desired : asset.views[0].view_id;
+      const prompts = storyboard.shots.map(shot => {
+        const references = [{ asset_id: shot.scene_id, view_id: pickView(assets[shot.scene_id], shot.shot_size === "Wide shot" ? "main" : "side") }];
+        const characterView = shot.camera_angle === "Front view" ? "front" : "three_quarter";
+        shot.character_ids.forEach(id => references.push({ asset_id: id, view_id: pickView(assets[id], characterView) }));
+        const propView = shot.camera_angle === "Front view" ? "front" : "three_quarter";
+        shot.prop_ids.forEach(id => references.push({ asset_id: id, view_id: pickView(assets[id], propView) }));
+        const dialogue = dialogues[shot.dialogue_id];
+        const deliveryText = dialogue ? ` The character delivers the line ${dialogue.delivery || "neutrally"}: ${dialogue.text}` : "";
+        const actionText = shot.actions.map(action => action.description).join(" ").trim().replace(/\.$/, "");
+        return {
+          shot_id: shot.shot_id, reference_assets: references,
+          image_prompt: `${globalStyle}. ${shot.visual} ${shot.shot_size}, ${shot.camera_angle}, cinematic composition, 16:9.`,
+          video_prompt: `${globalStyle}. ${shot.duration_seconds}-second shot. ${shot.shot_size}, ${shot.camera_angle}. ${shot.camera_movement}. ${shot.visual} ${actionText}.${deliveryText} Keep character appearance, clothing, props and scene layout consistent.`,
+          negative_prompt: "deformed anatomy, extra fingers, duplicated people, changing clothing, changing props, inconsistent architecture, flicker, text, watermark"
+        };
+      });
+      return { format_version: storyboard.format_version, project_id: storyboard.project_id, visual_style: storyboard.visual_style, prompts };
+    }
+
+    function setStatus(message, type = "") {
+      $("status").className = `status ${type}`.trim();
+      $("statusText").textContent = message;
+    }
+
+    function renderActive() {
+      if (!results) return;
+      $("outputName").textContent = FILE_NAMES[activeKey];
+      $("output").textContent = JSON.stringify(results[activeKey], null, 2);
+      document.querySelectorAll(".tab").forEach(tab => tab.classList.toggle("active", tab.dataset.key === activeKey));
+    }
+
+    function run() {
+      try {
+        setStatus("正在处理剧本…");
+        const visualStyle = { style_name: $("styleName").value.trim(), rendering: $("rendering").value.trim(), color_palette: $("palette").value.trim(), period: $("period").value.trim(), lighting: $("lighting").value.trim() };
+        const analysis = parseScript($("screenplay").value, $("projectId").value.trim() || "project_001", visualStyle);
+        const assets = generateAssets(analysis);
+        const storyboard = generateStoryboard(analysis);
+        const prompts = generatePrompts(storyboard, analysis, assets);
+        results = { analysis, assets, storyboard, prompts };
+        $("characterCount").textContent = analysis.characters.length;
+        $("assetCount").textContent = assets.assets.length;
+        $("shotCount").textContent = storyboard.shots.length;
+        $("promptCount").textContent = prompts.prompts.length;
+        activeKey = "analysis";
+        renderActive();
+        setStatus(`处理完成：${analysis.scenes.length}个场景，${storyboard.shots.length}个分镜`, "ready");
+      } catch (error) {
+        setStatus(error.message || "处理失败", "error");
+      }
+    }
+
+    function download(key) {
+      if (!results) { setStatus("请先运行流水线", "error"); return; }
+      const blob = new Blob([JSON.stringify(results[key], null, 2) + "\n"], { type: "application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url; anchor.download = FILE_NAMES[key]; anchor.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    $("runButton").addEventListener("click", run);
+    $("quickRunButton").addEventListener("click", run);
+    $("sampleButton").addEventListener("click", () => { $("screenplay").value = SAMPLE_SCRIPT; setStatus("已恢复示例剧本"); });
+    $("uploadButton").addEventListener("click", () => $("fileInput").click());
+    $("fileInput").addEventListener("change", event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => { $("screenplay").value = reader.result; setStatus(`已读取：${file.name}`); };
+      reader.onerror = () => setStatus("文本文件读取失败", "error");
+      reader.readAsText(file, "UTF-8");
+    });
+    document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", () => { activeKey = tab.dataset.key; renderActive(); }));
+    $("downloadCurrent").addEventListener("click", () => download(activeKey));
+    $("downloadAll").addEventListener("click", () => {
+      if (!results) { setStatus("请先运行流水线", "error"); return; }
+      Object.keys(FILE_NAMES).forEach((key, index) => setTimeout(() => download(key), index * 160));
+    });
+
+    run();
+  </script>
+</body>
+</html>
+
