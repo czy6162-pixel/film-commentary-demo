@@ -1,0 +1,33 @@
+name: 发布在线演示
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 获取仓库内容
+        uses: actions/checkout@v4
+      - name: 配置网页托管
+        uses: actions/configure-pages@v5
+      - name: 上传网页文件
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+      - name: 发布网页
+        id: deployment
+        uses: actions/deploy-pages@v4
