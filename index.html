@@ -370,12 +370,12 @@
           </div>
 
           <details>
-            <summary>可选 API（应用程序接口）配置</summary>
+            <summary>可选千问 API（应用程序接口）配置</summary>
             <div class="details-body">
-              <p class="hint">同时填写服务地址、模型名称和访问密钥后才发送请求；密钥只保留在当前页面内存中。服务需允许浏览器跨域调用。</p>
-              <div class="field"><label for="apiUrl">服务地址</label><input id="apiUrl" placeholder="https://example.com/v1"></div>
+              <p class="hint">已预设千问官方服务地址和 qwen-plus（千问增强模型）；填入访问密钥后才发送请求。密钥只保留在当前页面内存中。</p>
+              <div class="field"><label for="apiUrl">服务地址</label><input id="apiUrl" value="https://dashscope.aliyuncs.com/compatible-mode/v1"></div>
               <div class="field-row">
-                <div class="field"><label for="apiModel">模型名称</label><input id="apiModel" placeholder="由用户填写"></div>
+                <div class="field"><label for="apiModel">模型名称</label><input id="apiModel" value="qwen-plus"></div>
                 <div class="field"><label for="apiKey">访问密钥</label><input id="apiKey" type="password" autocomplete="off" placeholder="仅保留在当前页面"></div>
               </div>
             </div>
@@ -891,9 +891,8 @@
       const baseUrl = $("apiUrl").value.trim();
       const model = $("apiModel").value.trim();
       const apiKey = $("apiKey").value.trim();
-      const configured = [baseUrl, model, apiKey].filter(Boolean).length;
-      if (!configured) return;
-      if (configured !== 3) throw new Error("接口模式需要同时填写服务地址、模型名称和访问密钥。");
+      if (!apiKey) return;
+      if (!baseUrl || !model) throw new Error("填写访问密钥后，还需要同时填写服务地址和模型名称。");
       setStatus("正在调用模型优化解说词与提示词…");
       const compact = {
         shots: storyboard.shots.map(({ shot_id, visual, shot_size, camera_angle, camera_movement, narration }) => ({ shot_id, visual, shot_size, camera_angle, camera_movement, narration })),
