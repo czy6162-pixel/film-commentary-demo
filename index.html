@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>影视解说自动化演示台</title>
+  <link rel="icon" href="data:,">
   <meta name="description" content="从短剧本生成剧本解析、资产四视图、分镜和视频提示词的本地演示界面。">
   <style>
     :root {
@@ -354,7 +355,7 @@
               <input class="file-input" id="fileInput" type="file" accept=".txt,text/plain">
             </div>
           </div>
-          <p class="parser-note">中文剧本直接使用“角色：对白”格式；无需配置 API（应用程序接口）。</p>
+          <p class="parser-note">不配置 API（应用程序接口）时使用可复现的本地规则；填写完整配置后会真实调用模型优化解说词与提示词。</p>
           <textarea id="screenplay" spellcheck="false" aria-label="中文或英文短剧本"></textarea>
 
           <div class="field-row">
@@ -371,7 +372,7 @@
           <details>
             <summary>可选 API（应用程序接口）配置</summary>
             <div class="details-body">
-              <p class="hint">当前演示只生成提示词，不发送网络请求。这里用于展示后续生成服务的用户配置入口。</p>
+              <p class="hint">同时填写服务地址、模型名称和访问密钥后才发送请求；密钥只保留在当前页面内存中。服务需允许浏览器跨域调用。</p>
               <div class="field"><label for="apiUrl">服务地址</label><input id="apiUrl" placeholder="https://example.com/v1"></div>
               <div class="field-row">
                 <div class="field"><label for="apiModel">模型名称</label><input id="apiModel" placeholder="由用户填写"></div>
@@ -410,64 +411,34 @@
       </section>
     </main>
 
-    <footer>本演示在浏览器本地完成数据处理，不生成实际图片或视频。</footer>
+    <footer>默认在浏览器本地完成数据处理；配置接口后可调用模型优化文字结果。本项目不生成实际图片或视频。</footer>
   </div>
 
   <script>
-    const SAMPLE_SCRIPT = `TITLE: Charade - Opening Sample
-SOURCE: https://imsdb.com/scripts/Charade.html
-NOTE: Shortened and lightly adapted from the opening for parser testing.
+    const SAMPLE_SCRIPT = `《红色钥匙》
 
-EXT. MEGEVE HOTEL SUN DECK - DAY
+场景一：旧公寓客厅，夜，室内
+林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。
+张叔（低声）：你终于还是回来了。
+林夏：这把钥匙能打开什么？
+落地钟突然敲响，林夏看向通往走廊的木门。
 
-The elegant hotel sun deck has white tables, bright parasols and a view of snow-covered mountains. REGGIE, a stylish American woman in her late twenties with short dark hair and a pale blue ski outfit, sits beneath a parasol and eats lunch.
-
-JEAN-LOUIS, a six-year-old French boy in a red wool coat and navy trousers, aims a small black toy water pistol with a silver nozzle and squeezes the trigger. A stream of water hits REGGIE in the face.
-
-JEAN-LOUIS
-(nervously)
-Oh, la.
-
-REGGIE
-(sternly)
-Don't tell me you didn't know it was loaded.
-
-SYLVIE, a blonde French woman in her early thirties wearing a cream winter suit, approaches from the railing. JEAN-LOUIS runs away. SYLVIE picks up a glossy travel magazine with a blue cover while REGGIE continues eating.
-
-SYLVIE
-(concerned)
-When you start to eat like this, something is the matter.
-
-REGGIE
-(quietly)
-Sylvie, I'm getting a divorce.
-
-INT. HOTEL SWIMMING POOL - DAY
-
-REGGIE and SYLVIE walk beside a rectangular glass-enclosed pool with pale stone tiles and chrome handrails. Snow-covered mountains fill the ceiling-high windows behind them.
-
-SYLVIE
-(surprised)
-But why do you want a divorce?
-
-REGGIE
-(matter-of-factly)
-Because I don't love him.
-
-SYLVIE
-(in disbelief)
-But that is no reason to get a divorce!`;
+场景二：旧公寓走廊，夜，室内
+林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。
+林夏（紧张）：这里面是什么？
+林夏慢慢掀开木盒，里面放着一张童年合照。`;
 
     const SCENE_PATTERN = /^(INT\.|EXT\.|INT\/EXT\.|EXT\/INT\.|I\/E\.)\s*(.+)$/i;
     const CHINESE_SCENE_PATTERN = /^(第[一二三四五六七八九十百\d]+[场幕]|场景\s*[一二三四五六七八九十百\d]*|内景|外景)[：:\s、.．-]*(.*)$/;
-    const CHINESE_DIALOGUE_PATTERN = /^([\u4e00-\u9fffA-Za-z0-9·]{1,12})\s*[：:]\s*(.*)$/;
+    const CHINESE_DIALOGUE_PATTERN = /^([\u3400-\u9fffA-Za-z0-9·]{1,12})(?:[（(]([^）)]*)[）)])?\s*[：:]\s*(.*)$/;
     const TIME_WORDS = new Set(["DAY", "NIGHT", "DAWN", "DUSK", "MORNING", "AFTERNOON", "EVENING", "CONTINUOUS", "LATER"]);
     const NON_CHARACTER_CUES = new Set(["FADE IN", "FADE OUT", "CUT TO", "DISSOLVE TO", "ANOTHER ANGLE", "WIDER ANGLE", "CLOSE SHOT", "MEDIUM SHOT", "REVERSE SHOT"]);
     const PROP_TERMS = {
       "water pistol": "A small toy water pistol.", "magazine": "A printed magazine.", "key": "A key mentioned in the script.",
       "letter": "A paper letter mentioned in the script.", "photograph": "A photograph mentioned in the script.", "photo": "A photograph mentioned in the script.",
       "gun": "A gun mentioned in the script.", "knife": "A knife mentioned in the script.", "phone": "A phone mentioned in the script.", "suitcase": "A suitcase mentioned in the script.",
-      "水枪": "剧本中出现的水枪。", "手枪": "剧本中出现的手枪。", "手机": "剧本中出现的手机。", "钥匙": "剧本中出现的钥匙。",
+      "水枪": "剧本中出现的水枪。", "手枪": "剧本中出现的手枪。", "手机": "剧本中出现的手机。", "红色钥匙": "剧本中出现的红色钥匙。", "钥匙": "剧本中出现的钥匙。",
+      "落地钟": "剧本中出现的落地钟。", "木盒": "剧本中出现的木盒。", "童年合照": "剧本中出现的童年合照。", "合照": "剧本中出现的合照。",
       "信件": "剧本中出现的信件。", "照片": "剧本中出现的照片。", "行李箱": "剧本中出现的行李箱。", "杂志": "剧本中出现的杂志。",
       "咖啡": "剧本中出现的咖啡。", "杯子": "剧本中出现的杯子。"
     };
@@ -476,6 +447,13 @@ But that is no reason to get a divorce!`;
       scene: [["main", "Main view", "main establishing view from the entrance"], ["reverse", "Reverse view", "reverse view facing the entrance"], ["side", "Side view", "side view showing spatial depth"], ["top", "Top layout", "top-down layout view"]],
       prop: [["front", "Front view", "front product view"], ["three_quarter", "Three-quarter view", "three-quarter product view"], ["side", "Side view", "left side product view"], ["back", "Back view", "back product view"]]
     };
+    const CAMERA_PLANS = [
+      ["Close-up", "Front view", "Static"],
+      ["Medium close-up", "Three-quarter view", "Subtle push in"],
+      ["Over-the-shoulder", "Eye level", "Slow lateral move"],
+      ["Medium shot", "Slight low angle", "Slow pull back"],
+      ["Close-up", "Profile view", "Gentle handheld drift"]
+    ];
     const FILE_NAMES = { analysis: "script_analysis.json", assets: "assets.json", storyboard: "storyboard.json", prompts: "prompts.json" };
     let results = null;
     let activeKey = "analysis";
@@ -574,12 +552,17 @@ But that is no reason to get a divorce!`;
       let current = null;
       lines.forEach(raw => {
         const line = raw.trim();
-        if (!line || /^(剧名|标题)\s*[：:]/.test(line)) return;
+        if (!line || /^(剧名|标题)\s*[：:]/.test(line) || /^《.+》$/.test(line)) return;
         const match = line.match(CHINESE_SCENE_PATTERN);
         if (match) {
           if (current) scenes.push(current);
-          const location = (match[2] || match[1]).trim();
-          current = { heading: line, location, time: "", lines: [] };
+          const body = (match[2] || match[1]).trim();
+          const parts = body.split(/[，,\s]+/).filter(Boolean);
+          const timeWords = new Set(["日", "白天", "夜", "夜晚", "清晨", "早晨", "上午", "中午", "下午", "黄昏", "傍晚", "凌晨"]);
+          const spaceWords = new Set(["室内", "内景", "室外", "外景"]);
+          const time = parts.find(part => timeWords.has(part)) || "";
+          const location = parts.filter(part => !timeWords.has(part) && !spaceWords.has(part)).join(" ") || body;
+          current = { heading: line, location, time, lines: [] };
         } else {
           if (!current) current = { heading: "场景一", location: "未指定场景", time: "", lines: [] };
           current.lines.push(raw.replace(/\s+$/, ""));
@@ -592,11 +575,11 @@ But that is no reason to get a divorce!`;
     function parseChineseLine(line) {
       const match = line.match(CHINESE_DIALOGUE_PATTERN);
       if (!match || /^(场景|时间|地点|标题|剧名)$/.test(match[1])) return null;
-      let text = match[2].trim();
-      let delivery = "";
+      let text = match[3].trim();
+      let delivery = (match[2] || "").trim();
       const deliveryMatch = text.match(/^[（(]([^）)]+)[）)]\s*/);
       if (deliveryMatch) {
-        delivery = deliveryMatch[1].trim();
+        delivery = delivery || deliveryMatch[1].trim();
         text = text.slice(deliveryMatch[0].length).trim();
       }
       return { speaker: match[1].trim(), delivery, text };
@@ -617,10 +600,10 @@ But that is no reason to get a divorce!`;
       const sceneIds = rawScenes.map((_, index) => makeId("scene", index + 1));
       const combinedText = rawScenes.map(scene => scene.lines.join("\n")).join("\n");
       const propCandidates = [];
-      Object.entries(PROP_TERMS).forEach(([term, description]) => {
+      Object.entries(PROP_TERMS).sort((a, b) => b[0].length - a[0].length).forEach(([term, description]) => {
         if (containsWord(combinedText, term)) {
           const canonical = term === "photo" ? "photograph" : term;
-          if (!propCandidates.some(item => item[0] === canonical)) propCandidates.push([canonical, description]);
+          if (!propCandidates.some(item => item[0] === canonical || item[0].includes(canonical))) propCandidates.push([canonical, description]);
         }
       });
       const propIds = Object.fromEntries(propCandidates.map(([term], index) => [term, makeId("prop", index + 1)]));
@@ -678,8 +661,9 @@ But that is no reason to get a divorce!`;
         };
       });
       const titleLine = lines.find(line => /^(剧名|标题)\s*[：:]/.test(line.trim()));
-      const title = titleLine ? titleLine.split(/[：:]/).slice(1).join(":").trim() : "中文短剧本";
-      return { format_version: "1.0", project_id: projectId, title, visual_style: visualStyle, characters, props, scenes };
+      const bookTitle = lines.map(line => line.trim().match(/^《(.+)》$/)).find(Boolean);
+      const title = titleLine ? titleLine.split(/[：:]/).slice(1).join(":").trim() : bookTitle ? bookTitle[1].trim() : "中文短剧本";
+      return { format_version: "1.1", project_id: projectId, title, source_language: "zh", visual_style: visualStyle, characters, props, scenes };
     }
 
     function parseScript(text, projectId, visualStyle) {
@@ -750,7 +734,7 @@ But that is no reason to get a divorce!`;
       });
 
       const titleLine = lines.find(line => line.toUpperCase().startsWith("TITLE:"));
-      return { format_version: "1.0", project_id: projectId, title: titleLine ? titleLine.split(":").slice(1).join(":").trim() : "Untitled Screenplay", visual_style: visualStyle, characters, props, scenes };
+      return { format_version: "1.1", project_id: projectId, title: titleLine ? titleLine.split(":").slice(1).join(":").trim() : "Untitled Screenplay", source_language: "en", visual_style: visualStyle, characters, props, scenes };
     }
 
     function buildViews(assetType, name, description, visualStyle) {
@@ -780,69 +764,159 @@ But that is no reason to get a divorce!`;
       return { format_version: analysis.format_version, project_id: analysis.project_id, visual_style: analysis.visual_style, assets };
     }
 
-    function selectAction(scene, characterId = null) {
-      if (characterId) {
-        const matching = scene.actions.filter(action => action.character_id === characterId).sort((a, b) => b.description.length - a.description.length);
-        if (matching.length) return matching[0];
+    function selectAction(scene, index = 0, characterId = null) {
+      let candidates = characterId ? scene.actions.filter(action => action.character_id === characterId) : [];
+      if (!candidates.length) candidates = scene.actions;
+      const unique = candidates.filter((action, position, list) => list.findIndex(item => item.description === action.description) === position);
+      return unique.length ? unique[index % unique.length] : { character_id: characterId, description: scene.summary };
+    }
+
+    function narrationForDialogue(name, dialogue, index, language) {
+      if (language === "zh") {
+        const templates = [
+          `${name}${dialogue.delivery ? `以${dialogue.delivery}的语气` : ""}说道：“${dialogue.text}”`,
+          `面对眼前的情形，${name}${dialogue.delivery ? `显得${dialogue.delivery}` : "开口"}：“${dialogue.text}”`,
+          `${name}的回应打破了沉默：“${dialogue.text}”`,
+          `此时，${name}${dialogue.delivery ? `带着${dialogue.delivery}` : ""}说：“${dialogue.text}”`
+        ];
+        return templates[index % templates.length];
       }
-      return scene.actions[0] || { character_id: characterId, description: scene.summary };
+      const templates = [
+        `${name} says${dialogue.delivery ? ` ${dialogue.delivery}` : ""}, "${dialogue.text}"`,
+        `Breaking the silence, ${name} replies, "${dialogue.text}"`,
+        `${name}'s response follows: "${dialogue.text}"`,
+        `At that moment, ${name} says, "${dialogue.text}"`
+      ];
+      return templates[index % templates.length];
+    }
+
+    function adjustedMovement(base, delivery) {
+      const value = (delivery || "").toLowerCase();
+      if (/(愤怒|急|喊|angry|urgent|shout)/.test(value)) return "Quick push in";
+      if (/(紧张|害怕|nervous|afraid)/.test(value)) return "Subtle handheld drift";
+      if (/(轻声|低声|平静|whisper|quiet|calm)/.test(value)) return "Slow push in";
+      return base;
     }
 
     function generateStoryboard(analysis) {
       const names = Object.fromEntries(analysis.characters.map(character => [character.character_id, character.name]));
       const props = Object.fromEntries(analysis.props.map(prop => [prop.prop_id, prop]));
+      const language = analysis.source_language || "en";
       const shots = [];
       let shotNumber = 1;
+      let dialogueIndex = 0;
       analysis.scenes.forEach(scene => {
         const action = selectAction(scene);
-        const visual = scene.summary;
+        const visual = scene.summary || scene.location;
         const character_ids = scene.character_ids.filter(id => containsWord(visual, names[id]));
-        shots.push({ shot_id: makeId("shot", shotNumber), sequence: shotNumber, scene_id: scene.scene_id, duration_seconds: 4, shot_size: "Wide shot", camera_angle: "Eye level", camera_movement: "Slow push in", character_ids, prop_ids: [], visual, actions: [action], dialogue_id: null, narration: "", transition: "Cut" });
+        const narration = language === "zh" ? `镜头来到${scene.location}。${visual}` : `The scene opens in ${scene.location}. ${visual}`;
+        shots.push({ shot_id: makeId("shot", shotNumber), sequence: shotNumber, scene_id: scene.scene_id, duration_seconds: 4, shot_size: "Wide shot", camera_angle: "Eye level", camera_movement: "Slow push in", character_ids, prop_ids: [], visual, actions: [action], dialogue_id: null, narration, transition: "Cut" });
         shotNumber += 1;
         scene.dialogues.forEach(dialogue => {
           const characterId = dialogue.speaker_id;
-          const actionItem = selectAction(scene, characterId);
-          const closeUp = shotNumber % 2 === 0;
-          const visualText = `${names[characterId]} speaks in ${scene.location}. ${actionItem.description}`;
+          const actionItem = selectAction(scene, dialogueIndex, characterId);
+          const [shotSize, cameraAngle, baseMovement] = CAMERA_PLANS[dialogueIndex % CAMERA_PLANS.length];
+          const movement = adjustedMovement(baseMovement, dialogue.delivery);
+          const visualText = language === "zh" ? `${names[characterId]}在${scene.location}说话。${actionItem.description}` : `${names[characterId]} speaks in ${scene.location}. ${actionItem.description}`;
           const characters = scene.character_ids.filter(id => containsWord(visualText, names[id]));
           if (!characters.includes(characterId)) characters.unshift(characterId);
           const prop_ids = scene.prop_ids.filter(id => props[id] && containsWord(visualText, props[id].name));
+          const textLength = language === "zh" ? dialogue.text.replace(/\s/g, "").length / 4.2 : dialogue.text.split(/\s+/).length / 2.5;
           shots.push({
             shot_id: makeId("shot", shotNumber), sequence: shotNumber, scene_id: scene.scene_id,
-            duration_seconds: Math.max(3, Math.min(7, Math.round(dialogue.text.split(/\s+/).length / 2.5))),
-            shot_size: closeUp ? "Close-up" : "Medium close-up", camera_angle: closeUp ? "Front view" : "Three-quarter view",
-            camera_movement: closeUp ? "Static" : "Subtle push in", character_ids: characters, prop_ids, visual: visualText,
-            actions: [actionItem], dialogue_id: dialogue.dialogue_id, narration: "", transition: "Cut"
+            duration_seconds: Math.max(3, Math.min(8, Math.round(textLength))),
+            shot_size: shotSize, camera_angle: cameraAngle, camera_movement: movement,
+            character_ids: characters, prop_ids, visual: visualText, actions: [actionItem], dialogue_id: dialogue.dialogue_id,
+            narration: narrationForDialogue(names[characterId], dialogue, dialogueIndex, language), transition: "Cut"
           });
+          dialogueIndex += 1;
           shotNumber += 1;
         });
       });
       if (shots.length) shots[shots.length - 1].transition = "Fade out";
-      return { format_version: analysis.format_version, project_id: analysis.project_id, visual_style: analysis.visual_style, shots };
+      return { format_version: analysis.format_version, project_id: analysis.project_id, visual_style: analysis.visual_style, narration_generation: { mode: "deterministic_rules", language }, shots };
+    }
+
+    function dynamicNegative(shot, scene, dialogue) {
+      let terms = ["deformed anatomy", "extra fingers", "flicker", "text", "watermark"];
+      terms.push(...(shot.character_ids.length > 1 ? ["duplicated people", "swapped faces", "incorrect eyelines"] : ["duplicate subject", "inconsistent face"]));
+      if (shot.shot_size.includes("Close-up")) terms.push("blurred eyes", "distorted mouth", "cropped chin");
+      if (shot.shot_size === "Wide shot") terms.push("inconsistent architecture", "warped perspective");
+      if (shot.camera_movement !== "Static") terms.push("camera jitter", "motion smear");
+      if (shot.prop_ids.length) terms.push("changing props", "floating objects");
+      if (dialogue) terms.push("incorrect lip sync", "unreadable subtitles");
+      if (["night", "夜", "夜晚", "凌晨"].includes(String(scene.time || "").toLowerCase())) terms.push("crushed shadows", "overexposed highlights");
+      return [...new Set(terms)].join(", ");
     }
 
     function generatePrompts(storyboard, analysis, assetData) {
       const globalStyle = styleText(storyboard.visual_style);
       const dialogues = Object.fromEntries(analysis.scenes.flatMap(scene => scene.dialogues).map(dialogue => [dialogue.dialogue_id, dialogue]));
+      const scenes = Object.fromEntries(analysis.scenes.map(scene => [scene.scene_id, scene]));
       const assets = Object.fromEntries(assetData.assets.map(asset => [asset.asset_id, asset]));
       const pickView = (asset, desired) => asset.views.some(view => view.view_id === desired) ? desired : asset.views[0].view_id;
       const prompts = storyboard.shots.map(shot => {
         const references = [{ asset_id: shot.scene_id, view_id: pickView(assets[shot.scene_id], shot.shot_size === "Wide shot" ? "main" : "side") }];
-        const characterView = shot.camera_angle === "Front view" ? "front" : "three_quarter";
+        const characterView = shot.camera_angle === "Front view" ? "front" : shot.camera_angle === "Profile view" ? "side" : "three_quarter";
         shot.character_ids.forEach(id => references.push({ asset_id: id, view_id: pickView(assets[id], characterView) }));
         const propView = shot.camera_angle === "Front view" ? "front" : "three_quarter";
         shot.prop_ids.forEach(id => references.push({ asset_id: id, view_id: pickView(assets[id], propView) }));
         const dialogue = dialogues[shot.dialogue_id];
-        const deliveryText = dialogue ? ` The character delivers the line ${dialogue.delivery || "neutrally"}: ${dialogue.text}` : "";
+        const deliveryText = dialogue ? ` The character delivers the line ${dialogue.delivery || "naturally"}: ${dialogue.text}` : "";
         const actionText = shot.actions.map(action => action.description).join(" ").trim().replace(/\.$/, "");
         return {
           shot_id: shot.shot_id, reference_assets: references,
           image_prompt: `${globalStyle}. ${shot.visual} ${shot.shot_size}, ${shot.camera_angle}, cinematic composition, 16:9.`,
           video_prompt: `${globalStyle}. ${shot.duration_seconds}-second shot. ${shot.shot_size}, ${shot.camera_angle}. ${shot.camera_movement}. ${shot.visual} ${actionText}.${deliveryText} Keep character appearance, clothing, props and scene layout consistent.`,
-          negative_prompt: "deformed anatomy, extra fingers, duplicated people, changing clothing, changing props, inconsistent architecture, flicker, text, watermark"
+          negative_prompt: dynamicNegative(shot, scenes[shot.scene_id], dialogue)
         };
       });
-      return { format_version: storyboard.format_version, project_id: storyboard.project_id, visual_style: storyboard.visual_style, prompts };
+      return { format_version: storyboard.format_version, project_id: storyboard.project_id, visual_style: storyboard.visual_style, generation_mode: "deterministic_rules", prompts };
+    }
+
+    function apiEndpoint(baseUrl) {
+      const url = baseUrl.trim().replace(/\/+$/, "");
+      return url.endsWith("/chat/completions") ? url : `${url}/chat/completions`;
+    }
+
+    function parseApiJson(content) {
+      let text = String(content || "").trim();
+      const fence = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+      if (fence) text = fence[1];
+      else text = text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1);
+      return JSON.parse(text);
+    }
+
+    async function enhanceWithApi(storyboard, prompts) {
+      const baseUrl = $("apiUrl").value.trim();
+      const model = $("apiModel").value.trim();
+      const apiKey = $("apiKey").value.trim();
+      const configured = [baseUrl, model, apiKey].filter(Boolean).length;
+      if (!configured) return;
+      if (configured !== 3) throw new Error("接口模式需要同时填写服务地址、模型名称和访问密钥。");
+      setStatus("正在调用模型优化解说词与提示词…");
+      const compact = {
+        shots: storyboard.shots.map(({ shot_id, visual, shot_size, camera_angle, camera_movement, narration }) => ({ shot_id, visual, shot_size, camera_angle, camera_movement, narration })),
+        prompts: prompts.prompts
+      };
+      const instruction = `优化下列分镜的解说词、绘画提示词、视频提示词和负面提示词。保持所有 shot_id 不变，解说词保持原语言，针对每个镜头动态调整，减少重复。只返回 JSON：{"shots":[{"shot_id":"...","narration":"..."}],"prompts":[{"shot_id":"...","image_prompt":"...","video_prompt":"...","negative_prompt":"..."}]}\n\n${JSON.stringify(compact)}`;
+      const response = await fetch(apiEndpoint(baseUrl), {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+        body: JSON.stringify({ model, temperature: 0.4, messages: [{ role: "system", content: "你是影视前期制作助手，只返回有效 JSON。" }, { role: "user", content: instruction }] })
+      });
+      if (!response.ok) throw new Error(`接口调用失败（HTTP ${response.status}）。`);
+      const raw = await response.json();
+      const enhanced = parseApiJson(raw?.choices?.[0]?.message?.content);
+      const shotMap = Object.fromEntries(storyboard.shots.map(shot => [shot.shot_id, shot]));
+      const promptMap = Object.fromEntries(prompts.prompts.map(prompt => [prompt.shot_id, prompt]));
+      (enhanced.shots || []).forEach(item => { if (shotMap[item.shot_id] && String(item.narration || "").trim()) shotMap[item.shot_id].narration = String(item.narration).trim(); });
+      (enhanced.prompts || []).forEach(item => {
+        if (!promptMap[item.shot_id]) return;
+        ["image_prompt", "video_prompt", "negative_prompt"].forEach(field => { if (String(item[field] || "").trim()) promptMap[item.shot_id][field] = String(item[field]).trim(); });
+      });
+      storyboard.narration_generation.mode = "api_enhanced";
+      prompts.generation_mode = "api_enhanced";
     }
 
     function setStatus(message, type = "") {
@@ -857,7 +931,7 @@ But that is no reason to get a divorce!`;
       document.querySelectorAll(".tab").forEach(tab => tab.classList.toggle("active", tab.dataset.key === activeKey));
     }
 
-    function run() {
+    async function run() {
       try {
         setStatus("正在处理剧本…");
         const visualStyle = { style_name: $("styleName").value.trim(), rendering: $("rendering").value.trim(), color_palette: $("palette").value.trim(), period: $("period").value.trim(), lighting: $("lighting").value.trim() };
@@ -865,6 +939,7 @@ But that is no reason to get a divorce!`;
         const assets = generateAssets(analysis);
         const storyboard = generateStoryboard(analysis);
         const prompts = generatePrompts(storyboard, analysis, assets);
+        await enhanceWithApi(storyboard, prompts);
         results = { analysis, assets, storyboard, prompts };
         $("characterCount").textContent = analysis.characters.length;
         $("assetCount").textContent = assets.assets.length;
@@ -872,7 +947,8 @@ But that is no reason to get a divorce!`;
         $("promptCount").textContent = prompts.prompts.length;
         activeKey = "analysis";
         renderActive();
-        setStatus(`处理完成：${analysis.scenes.length}个场景，${storyboard.shots.length}个分镜`, "ready");
+        const mode = storyboard.narration_generation.mode === "api_enhanced" ? "模型优化" : "本地规则";
+        setStatus(`处理完成（${mode}）：${analysis.scenes.length}个场景，${storyboard.shots.length}个分镜`, "ready");
       } catch (error) {
         setStatus(error.message || "处理失败", "error");
       }
@@ -910,3 +986,4 @@ But that is no reason to get a divorce!`;
   </script>
 </body>
 </html>
+
