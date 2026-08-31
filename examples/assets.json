@@ -1,0 +1,264 @@
+{
+  "format_version": "1.1",
+  "project_id": "red_key_demo",
+  "visual_style": {
+    "style_name": "悬疑电影写实风格",
+    "rendering": "写实电影摄影，轻微胶片颗粒",
+    "color_palette": "低饱和冷色，红色作为视觉强调",
+    "period": "当代旧公寓",
+    "lighting": "夜间低调照明，柔和阴影"
+  },
+  "assets": [
+    {
+      "asset_id": "char_001",
+      "asset_type": "character",
+      "name": "张叔",
+      "source_scene_ids": [
+        "scene_001"
+      ],
+      "consistency_description": "林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。",
+      "views": [
+        {
+          "view_id": "front",
+          "view_name": "Front view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 张叔: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. front full-body view, neutral pose, consistent face, body shape, hair and clothing, plain background."
+        },
+        {
+          "view_id": "three_quarter",
+          "view_name": "Three-quarter view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 张叔: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. three-quarter full-body view, neutral pose, consistent face, body shape, hair and clothing, plain background."
+        },
+        {
+          "view_id": "side",
+          "view_name": "Side view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 张叔: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. left side full-body view, neutral pose, consistent face, body shape, hair and clothing, plain background."
+        },
+        {
+          "view_id": "back",
+          "view_name": "Back view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 张叔: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. back full-body view, neutral pose, consistent face, body shape, hair and clothing, plain background."
+        }
+      ]
+    },
+    {
+      "asset_id": "char_002",
+      "asset_type": "character",
+      "name": "林夏",
+      "source_scene_ids": [
+        "scene_001",
+        "scene_002"
+      ],
+      "consistency_description": "林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。",
+      "views": [
+        {
+          "view_id": "front",
+          "view_name": "Front view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 林夏: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. front full-body view, neutral pose, consistent face, body shape, hair and clothing, plain background."
+        },
+        {
+          "view_id": "three_quarter",
+          "view_name": "Three-quarter view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 林夏: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. three-quarter full-body view, neutral pose, consistent face, body shape, hair and clothing, plain background."
+        },
+        {
+          "view_id": "side",
+          "view_name": "Side view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 林夏: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. left side full-body view, neutral pose, consistent face, body shape, hair and clothing, plain background."
+        },
+        {
+          "view_id": "back",
+          "view_name": "Back view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 林夏: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. back full-body view, neutral pose, consistent face, body shape, hair and clothing, plain background."
+        }
+      ]
+    },
+    {
+      "asset_id": "scene_001",
+      "asset_type": "scene",
+      "name": "旧公寓客厅",
+      "source_scene_ids": [
+        "scene_001"
+      ],
+      "consistency_description": "旧公寓客厅. 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。",
+      "views": [
+        {
+          "view_id": "main",
+          "view_name": "Main view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 旧公寓客厅: 旧公寓客厅. 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. main establishing view from the entrance, no characters, consistent architecture, furniture, entrances and lighting."
+        },
+        {
+          "view_id": "reverse",
+          "view_name": "Reverse view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 旧公寓客厅: 旧公寓客厅. 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. reverse view facing the entrance, no characters, consistent architecture, furniture, entrances and lighting."
+        },
+        {
+          "view_id": "side",
+          "view_name": "Side view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 旧公寓客厅: 旧公寓客厅. 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. side view showing spatial depth, no characters, consistent architecture, furniture, entrances and lighting."
+        },
+        {
+          "view_id": "top",
+          "view_name": "Top layout",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 旧公寓客厅: 旧公寓客厅. 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. top-down layout view, no characters, consistent architecture, furniture, entrances and lighting."
+        }
+      ]
+    },
+    {
+      "asset_id": "scene_002",
+      "asset_type": "scene",
+      "name": "旧公寓走廊",
+      "source_scene_ids": [
+        "scene_002"
+      ],
+      "consistency_description": "旧公寓走廊. 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。",
+      "views": [
+        {
+          "view_id": "main",
+          "view_name": "Main view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 旧公寓走廊: 旧公寓走廊. 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. main establishing view from the entrance, no characters, consistent architecture, furniture, entrances and lighting."
+        },
+        {
+          "view_id": "reverse",
+          "view_name": "Reverse view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 旧公寓走廊: 旧公寓走廊. 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. reverse view facing the entrance, no characters, consistent architecture, furniture, entrances and lighting."
+        },
+        {
+          "view_id": "side",
+          "view_name": "Side view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 旧公寓走廊: 旧公寓走廊. 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. side view showing spatial depth, no characters, consistent architecture, furniture, entrances and lighting."
+        },
+        {
+          "view_id": "top",
+          "view_name": "Top layout",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 旧公寓走廊: 旧公寓走廊. 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. top-down layout view, no characters, consistent architecture, furniture, entrances and lighting."
+        }
+      ]
+    },
+    {
+      "asset_id": "prop_001",
+      "asset_type": "prop",
+      "name": "红色钥匙",
+      "source_scene_ids": [
+        "scene_001",
+        "scene_002"
+      ],
+      "consistency_description": "林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。",
+      "views": [
+        {
+          "view_id": "front",
+          "view_name": "Front view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 红色钥匙: 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. front product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "three_quarter",
+          "view_name": "Three-quarter view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 红色钥匙: 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. three-quarter product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "side",
+          "view_name": "Side view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 红色钥匙: 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. left side product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "back",
+          "view_name": "Back view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 红色钥匙: 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. back product view, centered object, consistent shape, material, color and wear, plain background."
+        }
+      ]
+    },
+    {
+      "asset_id": "prop_002",
+      "asset_type": "prop",
+      "name": "童年合照",
+      "source_scene_ids": [
+        "scene_002"
+      ],
+      "consistency_description": "林夏慢慢掀开木盒，里面放着一张童年合照。",
+      "views": [
+        {
+          "view_id": "front",
+          "view_name": "Front view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 童年合照: 林夏慢慢掀开木盒，里面放着一张童年合照。. front product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "three_quarter",
+          "view_name": "Three-quarter view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 童年合照: 林夏慢慢掀开木盒，里面放着一张童年合照。. three-quarter product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "side",
+          "view_name": "Side view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 童年合照: 林夏慢慢掀开木盒，里面放着一张童年合照。. left side product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "back",
+          "view_name": "Back view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 童年合照: 林夏慢慢掀开木盒，里面放着一张童年合照。. back product view, centered object, consistent shape, material, color and wear, plain background."
+        }
+      ]
+    },
+    {
+      "asset_id": "prop_003",
+      "asset_type": "prop",
+      "name": "落地钟",
+      "source_scene_ids": [
+        "scene_001"
+      ],
+      "consistency_description": "林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。",
+      "views": [
+        {
+          "view_id": "front",
+          "view_name": "Front view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 落地钟: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. front product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "three_quarter",
+          "view_name": "Three-quarter view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 落地钟: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. three-quarter product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "side",
+          "view_name": "Side view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 落地钟: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. left side product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "back",
+          "view_name": "Back view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 落地钟: 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。. back product view, centered object, consistent shape, material, color and wear, plain background."
+        }
+      ]
+    },
+    {
+      "asset_id": "prop_004",
+      "asset_type": "prop",
+      "name": "木盒",
+      "source_scene_ids": [
+        "scene_002"
+      ],
+      "consistency_description": "林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。",
+      "views": [
+        {
+          "view_id": "front",
+          "view_name": "Front view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 木盒: 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. front product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "three_quarter",
+          "view_name": "Three-quarter view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 木盒: 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. three-quarter product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "side",
+          "view_name": "Side view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 木盒: 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. left side product view, centered object, consistent shape, material, color and wear, plain background."
+        },
+        {
+          "view_id": "back",
+          "view_name": "Back view",
+          "prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 木盒: 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. back product view, centered object, consistent shape, material, color and wear, plain background."
+        }
+      ]
+    }
+  ]
+}
+
