@@ -1,0 +1,115 @@
+{
+  "format_version": "1.1",
+  "project_id": "red_key_demo",
+  "visual_style": {
+    "style_name": "悬疑电影写实风格",
+    "rendering": "写实电影摄影，轻微胶片颗粒",
+    "color_palette": "低饱和冷色，红色作为视觉强调",
+    "period": "当代旧公寓",
+    "lighting": "夜间低调照明，柔和阴影"
+  },
+  "generation_mode": "deterministic_rules",
+  "prompts": [
+    {
+      "shot_id": "shot_001",
+      "reference_assets": [
+        {
+          "asset_id": "scene_001",
+          "view_id": "main"
+        },
+        {
+          "asset_id": "char_001",
+          "view_id": "three_quarter"
+        },
+        {
+          "asset_id": "char_002",
+          "view_id": "three_quarter"
+        }
+      ],
+      "image_prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。 Wide shot, Eye level, cinematic composition, 16:9.",
+      "video_prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 4-second shot. Wide shot, Eye level. Slow push in. 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。 林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。. Keep character appearance, clothing, props and scene layout consistent.",
+      "negative_prompt": "deformed anatomy, extra fingers, flicker, text, watermark, duplicated people, swapped faces, incorrect eyelines, inconsistent architecture, warped perspective, camera jitter, motion smear, crushed shadows, overexposed highlights"
+    },
+    {
+      "shot_id": "shot_002",
+      "reference_assets": [
+        {
+          "asset_id": "scene_001",
+          "view_id": "side"
+        },
+        {
+          "asset_id": "char_001",
+          "view_id": "front"
+        },
+        {
+          "asset_id": "prop_003",
+          "view_id": "front"
+        }
+      ],
+      "image_prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 张叔在旧公寓客厅说话。张叔站在落地钟旁。 Close-up, Front view, cinematic composition, 16:9.",
+      "video_prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 3-second shot. Close-up, Front view. Static. 张叔在旧公寓客厅说话。张叔站在落地钟旁。 张叔站在落地钟旁。. The character delivers the line naturally: 你终于还是回来了。 Keep character appearance, clothing, props and scene layout consistent.",
+      "negative_prompt": "deformed anatomy, extra fingers, flicker, text, watermark, duplicate subject, inconsistent face, blurred eyes, distorted mouth, cropped chin, changing props, floating objects, incorrect lip sync, unreadable subtitles, crushed shadows, overexposed highlights"
+    },
+    {
+      "shot_id": "shot_003",
+      "reference_assets": [
+        {
+          "asset_id": "scene_001",
+          "view_id": "side"
+        },
+        {
+          "asset_id": "char_002",
+          "view_id": "three_quarter"
+        },
+        {
+          "asset_id": "prop_003",
+          "view_id": "three_quarter"
+        }
+      ],
+      "image_prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 林夏在旧公寓客厅说话。落地钟突然敲响，林夏看向通往走廊的木门。 Medium close-up, Three-quarter view, cinematic composition, 16:9.",
+      "video_prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 3-second shot. Medium close-up, Three-quarter view. Subtle push in. 林夏在旧公寓客厅说话。落地钟突然敲响，林夏看向通往走廊的木门。 落地钟突然敲响，林夏看向通往走廊的木门。. The character delivers the line naturally: 这把钥匙能打开什么？ Keep character appearance, clothing, props and scene layout consistent.",
+      "negative_prompt": "deformed anatomy, extra fingers, flicker, text, watermark, duplicate subject, inconsistent face, camera jitter, motion smear, changing props, floating objects, incorrect lip sync, unreadable subtitles, crushed shadows, overexposed highlights"
+    },
+    {
+      "shot_id": "shot_004",
+      "reference_assets": [
+        {
+          "asset_id": "scene_002",
+          "view_id": "main"
+        },
+        {
+          "asset_id": "char_002",
+          "view_id": "three_quarter"
+        }
+      ],
+      "image_prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。 Wide shot, Eye level, cinematic composition, 16:9.",
+      "video_prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 4-second shot. Wide shot, Eye level. Slow push in. 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. Keep character appearance, clothing, props and scene layout consistent.",
+      "negative_prompt": "deformed anatomy, extra fingers, flicker, text, watermark, duplicate subject, inconsistent face, inconsistent architecture, warped perspective, camera jitter, motion smear, crushed shadows, overexposed highlights"
+    },
+    {
+      "shot_id": "shot_005",
+      "reference_assets": [
+        {
+          "asset_id": "scene_002",
+          "view_id": "side"
+        },
+        {
+          "asset_id": "char_002",
+          "view_id": "three_quarter"
+        },
+        {
+          "asset_id": "prop_001",
+          "view_id": "three_quarter"
+        },
+        {
+          "asset_id": "prop_004",
+          "view_id": "three_quarter"
+        }
+      ],
+      "image_prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 林夏在旧公寓走廊说话。林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。 Over-the-shoulder, Eye level, cinematic composition, 16:9.",
+      "video_prompt": "悬疑电影写实风格, 写实电影摄影，轻微胶片颗粒, 低饱和冷色，红色作为视觉强调, 当代旧公寓, 夜间低调照明，柔和阴影. 3-second shot. Over-the-shoulder, Eye level. Subtle handheld drift. 林夏在旧公寓走廊说话。林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。 林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。. The character delivers the line 紧张: 这里面是什么？ Keep character appearance, clothing, props and scene layout consistent.",
+      "negative_prompt": "deformed anatomy, extra fingers, flicker, text, watermark, duplicate subject, inconsistent face, camera jitter, motion smear, changing props, floating objects, incorrect lip sync, unreadable subtitles, crushed shadows, overexposed highlights"
+    }
+  ]
+}
+
