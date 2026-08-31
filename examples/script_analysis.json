@@ -1,0 +1,143 @@
+{
+  "format_version": "1.1",
+  "project_id": "red_key_demo",
+  "title": "红色钥匙",
+  "source_language": "zh",
+  "visual_style": {
+    "style_name": "悬疑电影写实风格",
+    "rendering": "写实电影摄影，轻微胶片颗粒",
+    "color_palette": "低饱和冷色，红色作为视觉强调",
+    "period": "当代旧公寓",
+    "lighting": "夜间低调照明，柔和阴影"
+  },
+  "characters": [
+    {
+      "character_id": "char_001",
+      "name": "张叔",
+      "aliases": [],
+      "description": "林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。"
+    },
+    {
+      "character_id": "char_002",
+      "name": "林夏",
+      "aliases": [],
+      "description": "林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。"
+    }
+  ],
+  "props": [
+    {
+      "prop_id": "prop_001",
+      "name": "红色钥匙",
+      "description": "林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。",
+      "scene_ids": [
+        "scene_001",
+        "scene_002"
+      ]
+    },
+    {
+      "prop_id": "prop_002",
+      "name": "童年合照",
+      "description": "林夏慢慢掀开木盒，里面放着一张童年合照。",
+      "scene_ids": [
+        "scene_002"
+      ]
+    },
+    {
+      "prop_id": "prop_003",
+      "name": "落地钟",
+      "description": "林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。",
+      "scene_ids": [
+        "scene_001"
+      ]
+    },
+    {
+      "prop_id": "prop_004",
+      "name": "木盒",
+      "description": "林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。",
+      "scene_ids": [
+        "scene_002"
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "scene_id": "scene_001",
+      "sequence": 1,
+      "heading": "场景一：旧公寓客厅，夜，室内",
+      "location": "旧公寓客厅",
+      "time": "夜",
+      "summary": "林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。张叔站在落地钟旁。",
+      "character_ids": [
+        "char_001",
+        "char_002"
+      ],
+      "prop_ids": [
+        "prop_001",
+        "prop_003"
+      ],
+      "actions": [
+        {
+          "character_id": "char_002",
+          "description": "林夏推门进入昏暗的客厅，手里攥着一把红色钥匙。"
+        },
+        {
+          "character_id": "char_001",
+          "description": "张叔站在落地钟旁。"
+        },
+        {
+          "character_id": "char_002",
+          "description": "落地钟突然敲响，林夏看向通往走廊的木门。"
+        }
+      ],
+      "dialogues": [
+        {
+          "dialogue_id": "dialogue_001",
+          "speaker_id": "char_001",
+          "text": "你终于还是回来了。",
+          "delivery": ""
+        },
+        {
+          "dialogue_id": "dialogue_002",
+          "speaker_id": "char_002",
+          "text": "这把钥匙能打开什么？",
+          "delivery": ""
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_002",
+      "sequence": 2,
+      "heading": "场景二：旧公寓走廊，夜，室内",
+      "location": "旧公寓走廊",
+      "time": "夜",
+      "summary": "林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。",
+      "character_ids": [
+        "char_002"
+      ],
+      "prop_ids": [
+        "prop_001",
+        "prop_002",
+        "prop_004"
+      ],
+      "actions": [
+        {
+          "character_id": "char_002",
+          "description": "林夏用红色钥匙打开走廊尽头的小门，一只积灰的木盒出现在门后。"
+        },
+        {
+          "character_id": "char_002",
+          "description": "林夏慢慢掀开木盒，里面放着一张童年合照。"
+        }
+      ],
+      "dialogues": [
+        {
+          "dialogue_id": "dialogue_003",
+          "speaker_id": "char_002",
+          "text": "这里面是什么？",
+          "delivery": "紧张"
+        }
+      ]
+    }
+  ]
+}
+
